@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Farmer Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #B2DFDB; /* Light Mint Green */
+            margin: 0;
+            padding: 10px;
+            line-height: 1.6;
+        }
+    
+        .container {
+            background-color: #FFFFFF; /* White background for the dashboard */
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+        }
+    
+        .header {
+            background-color: #004D40; /* Dark Green Header */
+            color: #FFFFFF; /* White text on header */
+            padding: 20px;
+            text-align: center;
+            margin: 0;
+        }
+    
+        .dashboard-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+    
+        .registered-batches,
+        .register-new-batch {
+            width: calc(48% - 10px);
+            box-sizing: border-box;
+            margin-bottom: 20px;
+            padding: 20px;
+            background-color: #FFFFFF; /* White background for each section */
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+    
+        .registered-batches h2,
+        .register-new-batch h2 {
+            color: #00695C; /* Dark Green heading color */
+            margin-bottom: 10px;
+        }
+    
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+    
+        li {
+            margin-bottom: 15px;
+            padding: 15px;
+            border: 1px solid #B2DFDB; /* Light Mint Green border */
+            border-radius: 4px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+    
+        img {
+            max-width: 50px;
+            height: auto;
+            cursor: pointer;
+        }
+    
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+    
+        label {
+            color: #37474F; /* Charcoal text color */
+            margin-bottom: 5px;
+        }
+    
+        input,
+        button {
+            padding: 10px;
+            border: 1px solid #B2DFDB; /* Light Mint Green border */
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+    
+        button {
+            background-color: #4CAF50; /* Olive green button */
+            color: #FFFFFF; /* White text on button */
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+    
+        button:hover {
+            background-color: #45A049; /* Darker shade on hover */
+        }
+    
+        .popup {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 2;
+        }
+    
+        .popup-content {
+            background-color: #FFFFFF; /* White background for the popup */
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            text-align: center;
+            padding: 20px;
+            max-width: 80%;
+        }
+    
+        .popup img {
+            max-width: 100%;
+            height: auto;
+            margin-bottom: 20px;
+        }
+    
+        .popup-info {
+            color: #37474F; /* Charcoal text color */
+            margin-top: 15px;
+        }
+    
+        .print-button {
+            background-color: #00695C; /* Dark Green Button */
+            color: #FFFFFF; /* White text on button */
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: background-color 0.3s;
+        }
+    
+        .print-button:hover {
+            background-color: #004D40; /* Darker shade on hover */
+        }
+
+        .ok-button {
+    background-color: #00695C; /* Olive green button */
+    color: #FFFFFF; /* White text on button */
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 20px;
+}
+
+.ok-button:hover {
+    background-color: #00695C; /* Darker shade on hover */
+}
+
+
+    </style>
+    
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Farmer Dashboard</h1>
+        </div>
+        <div class="dashboard-container">
+            <div class="registered-batches">
+                <h2>Registered Batches</h2>
+                <ul>
+                    {% for batch in registered_batches %}
+                        <li>
+                            <div>
+                                {{ batch.batch_name }} - {{ batch.crop_type }} - {{ batch.quantity }} units
+                                <br>
+                                Variety: {{ batch.variety }} | Growing Practices: {{ batch.growing_practices }} | Soil Conditions: {{ batch.soil_conditions }}
+                                <br>
+                                Fertilization Methods: {{ batch.fertilization_methods }} | Pest Control Measures: {{ batch.pest_control_measures }} | Harvest Date: {{ batch.harvest_datetime }}
+                                <br>
+                                Farm Location: {{ batch.farm_location }} | Irrigation Methods: {{ batch.irrigation_methods }} | Weather Conditions: {{ batch.weather_conditions }}
+                                <br>
+                                Certifications: {{ batch.certifications }}
+                            </div>
+                            <img src="{{ batch.qr_code_path }}" alt="QR Code" onclick="openPopup('{{ batch.qr_code_path }}', '{{ batch.batch_name }}', '{{ batch.crop_type }}', '{{ batch.quantity }}', '{{ batch.variety }}', '{{ batch.growing_practices }}', '{{ batch.soil_conditions }}', '{{ batch.fertilization_methods }}', '{{ batch.pest_control_measures }}', '{{ batch.harvest_datetime }}', '{{ batch.farm_location }}', '{{ batch.irrigation_methods }}', '{{ batch.weather_conditions }}', '{{ batch.certifications }}', '{{ batch.farm_media_path }}')">
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <div class="register-new-batch">
+                <h2>Register New Batch</h2>
+                <form method="post" action="{{ url_for('register_batch') }}">
+                    <!-- Existing fields -->
+                    <label for="batch_name">Batch Name:</label>
+                    <input type="text" id="batch_name" name="batch_name" placeholder="e.g., Summer Harvest" required>
+                
+                    <label for="crop_type">Crop Type:</label>
+                    <input type="text" id="crop_type" name="crop_type" placeholder="e.g., Tomatoes" required>
+                
+                    <label for="quantity">Quantity:</label>
+                    <input type="number" id="quantity" name="quantity" placeholder="e.g., 100" required>
+                
+                    <!-- New fields with suggestions -->
+                    <label for="variety">Variety:</label>
+                    <input type="text" id="variety" name="variety" placeholder="e.g., Heirloom" required>
+                
+                    <label for="growing_practices">Growing Practices:</label>
+                    <input type="text" id="growing_practices" name="growing_practices" placeholder="e.g., Organic" required>
+                
+                    <label for="soil_conditions">Soil Conditions:</label>
+                    <input type="text" id="soil_conditions" name="soil_conditions" placeholder="e.g., Loamy soil" required>
+                
+                    <label for="fertilization_methods">Fertilization Methods:</label>
+                    <input type="text" id="fertilization_methods" name="fertilization_methods" placeholder="e.g., Organic compost" required>
+                
+                    <label for="pest_control_measures">Pest Control Measures:</label>
+                    <input type="text" id="pest_control_measures" name="pest_control_measures" placeholder="e.g., Neem oil" required>
+                
+                    <label for="harvest_datetime">Harvest Date and Time:</label>
+                    <input type="datetime-local" id="harvest_datetime" name="harvest_datetime" placeholder="e.g., 2023-08-15T10:00" required>
+                
+                    <label for="farm_location">Farm Location:</label>
+                    <input type="text" id="farm_location" name="farm_location" placeholder="e.g., XYZ County, State" required>
+                
+                    <label for="irrigation_methods">Irrigation Methods:</label>
+                    <input type="text" id="irrigation_methods" name="irrigation_methods" placeholder="e.g., Drip irrigation" required>
+                
+                    <label for="weather_conditions">Weather Conditions:</label>
+                    <input type="text" id="weather_conditions" name="weather_conditions" placeholder="e.g., Sunny with occasional rain" required>
+                
+                    <label for="certifications">Certifications:</label>
+                    <input type="text" id="certifications" name="certifications" placeholder="e.g., USDA Organic" required>
+                
+                    <label for="farm_media_path">Farm Media Path:</label>
+                    <input type="text" id="farm_media_path" name="farm_media_path" placeholder="e.g., https://yourfarmwebsite.com/media" >
+                
+                    <!-- Include other new fields similarly -->
+                
+                    <button type="submit">Register Batch</button>
+                </form>
+                
+                
+            </div>
+        </div>
+    </div>
+
+    <!-- Popup for QR Code Image -->
+    <!-- Popup for QR Code Image -->
+<div class="popup" id="qrPopup">
+    <div class="popup-content">
+        <img id="popupImage" alt="QR Code">
+        <div class="popup-info" id="batchInfo"></div>
+        <button class="print-button" onclick="printQRCode()">Print</button>
+        <button class="ok-button" onclick="closePopup()">Ok</button>
+    </div>
+</div>
+
+
+    <script>
+        function openPopup(imagePath, batchName, cropType, quantity, variety, growingPractices, soilConditions, fertilizationMethods, pestControlMeasures, harvestDatetime, farmLocation, irrigationMethods, weatherConditions, certifications, farmMediaPath) {
+            // Adjust this function to handle the new fields accordingly
+            document.getElementById("popupImage").src = imagePath;
+            document.getElementById("batchInfo").innerHTML = `${batchName} - ${cropType} - ${quantity} units<br>
+                Variety: ${variety} | Growing Practices: ${growingPractices} | Soil Conditions: ${soilConditions}<br>
+                Fertilization Methods: ${fertilizationMethods} | Pest Control Measures: ${pestControlMeasures} | Harvest Date: ${harvestDatetime}<br>
+                Farm Location: ${farmLocation} | Irrigation Methods: ${irrigationMethods} | Weather Conditions: ${weatherConditions}<br>
+                Certifications: ${certifications}`;
+            document.querySelector(".popup").style.display = "flex";
+        }
+
+        function printQRCode() {
+            // Adjust this function if needed based on the new fields
+            var popupImage = document.getElementById("popupImage");
+            var printWindow = window.open('', '_blank');
+            printWindow.document.write('<html><head><title>Print</title></head><body>');
+            printWindow.document.write('<img src="' + popupImage.src + '" style="max-width: 100%; height: auto;">');
+            printWindow.document.write('<div style="text-align: center; margin-top: 20px;">' + document.getElementById("batchInfo").innerHTML + '</div>');
+            printWindow.document.write('</body></html>');
+            printWindow.document.close();
+            printWindow.print();
+        }
+
+        function closePopup() {
+        document.querySelector(".popup").style.display = "none";
+    }
+
+    </script>
+</body>
+</html>

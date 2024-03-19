@@ -1,0 +1,88 @@
+
+    <!DOCTYPE html>
+    <html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Product Tracking</title>
+        <style>
+            body {
+                font-family: 'Poppins', sans-serif;
+                background-color: #ECEFF1; /* Light Gray Background */
+                margin: 0;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                height: 100vh;
+            }
+
+            .container {
+                background-color: #FFFFFF; /* White Content Background */
+                border-radius: 8px;
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+                overflow: hidden;
+                width: 300px;
+                max-width: 100%;
+                padding: 20px;
+            }
+
+            .header {
+                background-color: #2196F3; /* Blue Header */
+                color: #FFFFFF; /* White text on header */
+                padding: 20px;
+                text-align: center;
+                margin-top: 0;
+            }
+
+            .tracking-info {
+                margin-top: 20px;
+            }
+
+            label {
+                display: block;
+                margin-bottom: 8px;
+                color: #37474F; /* Charcoal text color */
+            }
+
+            p {
+                color: #37474F;
+                margin-bottom: 16px;
+            }
+
+            .link {
+                text-align: center;
+                margin-top: 16px;
+            }
+
+            .link a {
+                color: #1976D2; /* Blue link color */
+            }
+
+            .link a:hover {
+                text-decoration: underline;
+            }
+        </style>
+    </head>
+
+    <body>
+        <div class="container">
+            <div class="header">
+                <h2>Product Tracking</h2>
+            </div>
+            <div class="tracking-info">
+                <label><strong>Batch ID:</strong> 18</label>
+                <label><strong>Batch Name:</strong> Batch-2</label>
+                <label><strong>Crop Type:</strong> Potato</label>
+                <label><strong>Quantity:</strong> 1</label>
+                <label><strong>Date Registered:</strong> 2024-03-13</label>
+                <p>Your product is on its way!</p>
+                <div class="link">
+                    <p>Back to <a href="#" onclick="window.close();">Tracking</a></p>
+                </div>
+            </div>
+        </div>
+    </body>
+
+    </html>
+    
